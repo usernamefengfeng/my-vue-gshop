@@ -41,7 +41,7 @@ export default {
     }
   },
 
-  //获取地址信息的异步action
+  //根据经纬度获取商铺列表的异步action
   async getShops ({commit,state}) {
     //1.调用接口请求函数发送请求
     const {longitude,latitude} = state  //经度，纬度

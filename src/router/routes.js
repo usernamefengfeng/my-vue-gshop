@@ -9,7 +9,7 @@ import Login from 'pages/Login/Login.vue'
 
 export default [
   {
-    path: '/',
+    path: '/',  //模糊匹配--重定向
     redirect: '/msite',
   },
   {

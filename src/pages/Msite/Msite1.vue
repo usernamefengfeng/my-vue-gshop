@@ -32,7 +32,6 @@
 
 <script type="text/ecmascript-6">
   import {mapState} from 'vuex'
-  import chunk from 'lodash/chunk'
   import Swiper from 'swiper'
   import 'swiper/dist/css/swiper.css'
   import Shops from 'components/Shops/Shops.vue'
@@ -40,23 +39,9 @@
     components: {
       Shops,
     },
-    async mounted() {
+    mounted() {
       this.$store.dispatch('getShops')
-      await this.$store.dispatch('getCategorys')
-      //更新状态数据--->调用监视回调--->异步更新界面
-        //将回调延迟到下次DOM更新循环之后，在修改数据之后立即使用它
-        this.$nextTick(() => {
-          //创建swiper对象的时机?   必须在列表页面显示之后
-          new Swiper ('.swiper-container', {
-            loop: true, // 循环模式选项
-            
-            // 如果需要分页器
-            pagination: {
-              el: '.swiper-pagination',
-            },
-            
-          })        
-        })
+      this.$store.dispatch('getCategorys')
     },
     computed: {
       ...mapState(['address','categorys']),
@@ -80,24 +65,15 @@
             smallArr = []
           }
         });
-
         //返回大数组
         return bigArr
-      },
-
-      /* 
-      lodash---库的使用---方法
-      */
-      /* categorysArr2 () {
-        return chunk(this.categorys)
-      } */
-
+      }
     },
 
     /* 
       1. watch + nextTick()
     */
-    /*  watch: {
+    watch: {
       //更新状态数据--->调用监视回调--->异步更新界面
       categorys () {  //categorys数据发生改变---数组数据拿到
 
@@ -116,7 +92,7 @@
           })        
         })
       }
-    }, */
+    },
   }
 </script>
 

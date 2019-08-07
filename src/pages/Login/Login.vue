@@ -4,16 +4,20 @@
       <div class="login_header">
         <h2 class="login_logo">硅谷外卖</h2>
         <div class="login_header_title">
-          <a href="javascript:;" class="on">短信登录</a>
-          <a href="javascript:;">密码登录</a>
+          <a href="javascript:;" :class="{on: loginWay}" @click="loginWay=true">短信登录</a>
+          <a href="javascript:;" :class="{on: !loginWay}" @click="loginWay=false">密码登录</a>
         </div>
       </div>
       <div class="login_content">
         <form>
-          <div class="on">
+          <!-- 验证码登录界面 -->
+          <div :class="{on: loginWay}">
             <section class="login_message">
-              <input type="tel" maxlength="11" placeholder="手机号">
-              <button disabled="disabled" class="get_verification">获取验证码</button>
+              <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
+              <button :disabled="!isRightPhone || computeTime > 0" class="get_verification" 
+              :class="{right_phone_number: isRightPhone}" @click.prevent="sendCode">
+              {{computeTime > 0 ? `验证码已发送(${computeTime}s)` : '获取验证码'}}
+              </button>
             </section>
             <section class="login_verification">
               <input type="tel" maxlength="8" placeholder="验证码">
@@ -23,16 +27,19 @@
               <a href="javascript:;">《用户服务协议》</a>
             </section>
           </div>
-          <div>
+          <!-- 密码登录界面 -->
+          <div :class="{on: !loginWay}">
             <section>
               <section class="login_message">
                 <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
               </section>
               <section class="login_verification">
-                <input type="tel" maxlength="8" placeholder="密码">
-                <div class="switch_button off">
-                  <div class="switch_circle"></div>
-                  <span class="switch_text">...</span>
+                <input :type="isShowPwd? 'text':'password'" maxlength="8" placeholder="密码">
+                <div class="switch_button" :class="isShowPwd? 'on':'off'" @click="isShowPwd = !isShowPwd">
+                  <div class="switch_circle" :class="{right: isShowPwd}"></div>
+                  <span class="switch_text">
+                    {{isShowPwd ? 'abc' : ''}}
+                  </span>
                 </div>
               </section>
               <section class="login_message">
@@ -53,7 +60,41 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { setInterval, clearInterval } from 'timers';
   export default {
+    data() {
+      return {
+        loginWay: true,  //true:短信登录  false:密码登录
+        phone: '',       //手机号码初始显示值
+        isShowPwd: false,  //是否显示密码
+        computeTime: 0,    //短信倒计时   显示==> computeTime>0 隐藏==> computeTime===0
+      }
+    },
+
+    computed: {
+      //验证是否是一个正确的手机号
+      isRightPhone () {
+        return /^1\d{10}$/.test(this.phone)   //test-----正则的测试方法
+      }
+    },
+
+    methods: {
+      /* 
+        点击发送验证码
+      */
+      sendCode () {
+        //先定义computeTime的最大延迟时间
+        this.computeTime = 10
+        //定义一个循环定时器，短信发送时间倒计时
+        const intervalId = setInterval(() => {
+          this.computeTime--
+          //当到达0时，停止定时器
+          if (this.computeTime === 0) {
+            clearInterval(intervalId)
+          }
+        }, 1000);
+      }
+    },
   }
 </script>
 
@@ -118,6 +159,8 @@
                 color #ccc
                 font-size 14px
                 background transparent
+                &.right_phone_number
+                  color black
             .login_verification
               position relative
               margin-top 16px
@@ -146,7 +189,6 @@
                 &.on
                   background #02a774
                 >.switch_circle
-                  //transform translateX(27px)
                   position absolute
                   top -1px
                   left -1px
@@ -157,6 +199,8 @@
                   background #fff
                   box-shadow 0 2px 4px 0 rgba(0,0,0,.1)
                   transition transform .3s
+                  &.right
+                    transform translateX(27px)
             .login_hint
               margin-top 12px
               color #999

@@ -40,8 +40,10 @@
     components: {
       Shops,
     },
+
+    //执行异步操作--发送ajax请求
     async mounted() {
-      this.$store.dispatch('getShops')
+      this.$store.dispatch('getShops')   //actions文件--->分发actions==>mutations==>直接更新数据状态
       await this.$store.dispatch('getCategorys')
       //更新状态数据--->调用监视回调--->异步更新界面
         //将回调延迟到下次DOM更新循环之后，在修改数据之后立即使用它

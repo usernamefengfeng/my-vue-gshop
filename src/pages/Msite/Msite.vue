@@ -32,7 +32,7 @@
 
 <script type="text/ecmascript-6">
   import {mapState} from 'vuex'
-  import chunk from 'lodash/chunk'
+  //import chunk from 'lodash/chunk'
   import Swiper from 'swiper'
   import 'swiper/dist/css/swiper.css'
   import Shops from 'components/Shops/Shops.vue'

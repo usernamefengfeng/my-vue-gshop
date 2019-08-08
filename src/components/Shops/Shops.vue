@@ -6,7 +6,7 @@
       <span class="shop_header_title">附近商家</span>
     </div>
     <div class="shop_container">
-      <ul class="shop_list">
+      <ul class="shop_list" v-if="shops.length>0">
         <li class="shop_li border-1px" v-for="(shop, index) in shops" :key="shop.id">
           <a>
             <div class="shop_left">
@@ -42,6 +42,23 @@
               </section>
             </div>
           </a>
+        </li>
+      </ul>
+      <ul v-else>
+        <li>
+          <img src="./images/shop_back.svg" alt="loading">
+        </li>
+        <li>
+          <img src="./images/shop_back.svg" alt="loading">
+        </li>
+        <li>
+          <img src="./images/shop_back.svg" alt="loading">
+        </li>
+        <li>
+          <img src="./images/shop_back.svg" alt="loading">
+        </li>
+        <li>
+          <img src="./images/shop_back.svg" alt="loading">
         </li>
       </ul>
     </div>

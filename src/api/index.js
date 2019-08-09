@@ -4,8 +4,8 @@
 */
 import ajax from './ajax'
 
-const BASE = 'api'
-const BASE2 = 'baidu'
+const BASE = '/api'
+const BASE2 = '/baidu'
 
 /* 
   根据经纬度获取位置详情

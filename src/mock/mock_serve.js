@@ -14,4 +14,4 @@ Mock.mock('/ratings',{code: 0, data: data.ratings})
 //info接口
 Mock.mock('/info',{code: 0, data: data.info})
 
-console.log('mockServer....') //测试mock接口
+console.log('测试-----mockServer....') //测试mock接口

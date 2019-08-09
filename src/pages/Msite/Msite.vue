@@ -61,7 +61,11 @@
         })
     },
     computed: {
-      ...mapState(['address','categorys']),
+      //...mapState(['address','categorys']),
+      ...mapState({
+        address: state => state.msite.address,
+        categorys: state => state.msite.categorys
+      }),
 
       //定义一个大数组存放每一页的商品列表数组--数据结构[[1,2,3,4,...],[7,8,9,10,...]]
       categorysArr () {

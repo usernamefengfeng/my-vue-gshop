@@ -71,7 +71,10 @@
   import Star from 'components/Star/Star.vue'
   export default {
     computed: {
-      ...mapState(['shops'])  //...mapState--映射==>this.$store.state.shops==>读取state中的数据信息
+      //...mapState(['shops'])  //...mapState--映射==>this.$store.state.shops==>读取state中的数据信息
+      ...mapState({
+        shops: state => state.msite.shops
+      })
     },
   }
 </script>

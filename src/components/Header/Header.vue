@@ -1,5 +1,5 @@
 <template>
-  <header class="header">
+  <header class="header" style="z-index: 999">
     <slot name="left"></slot>
     <span class="header_title">
       <span class="header_title_text ellipsis">{{title}}</span>

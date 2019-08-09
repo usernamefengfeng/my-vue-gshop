@@ -110,7 +110,7 @@ import {mapState} from 'vuex'
     },
     methods: {
       logout () {
-        MessageBox.confirm('确定退出吗?').then(action => {
+        MessageBox.confirm('确定退出吗?').then(() => {
           this.$router.replace('/login')
           this.$store.dispatch('logout')
         },() => {});

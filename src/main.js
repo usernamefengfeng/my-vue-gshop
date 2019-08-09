@@ -4,8 +4,8 @@ import { Button } from 'mint-ui';
 
 import store from './store'    //vuex最核心的管理对象store
 import router from './router'  //路由器
+import './mock/mock_serve'     //mock接口数据
 import './validate'  //login界面验证
-import './api'       //ajax请求
 
 import Header from 'components/Header/Header.vue'
 import Star from 'components/Star/Star.vue'

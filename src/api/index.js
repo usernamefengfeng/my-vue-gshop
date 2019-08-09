@@ -78,6 +78,21 @@ export const reqAutoLogin = () => ajax({
   }
 })
 
+/* 
+  商家详情
+*/
+export const reqInfo = () => ajax('/info')
+
+/* 
+  商家评价
+*/
+export const reqRatings = () => ajax('/ratings')
+
+/* 
+  商家商品
+*/
+export const reqGoods = () => ajax('/goods')
+
 export const reqBaiDuXxx = () => ajax(BASE2 + '/xxx')
 
 // reqAddress('116.36867', '40.10038').then((result) => {

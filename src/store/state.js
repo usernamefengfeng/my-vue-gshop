@@ -7,6 +7,11 @@ export default {
   address: {}, // 地址信息对象
   categorys: [], // 分类数组
   shops: [], //商家数组
+
   user: {},   //登录用户的信息
-  token: localStorage.getItem('token_key')  //当前登录用户对应的token
+  token: localStorage.getItem('token_key'),  //当前登录用户对应的token
+
+  goods: [], // 商品列表
+  ratings: [], // 商家评价列表
+  info: {}, // 商家信息
 }

@@ -8,13 +8,19 @@ import {
   RECEIVE_USER,
   RECEIVE_TOKEN,
   RESET_USER,
-  RESET_TOKEN
+  RESET_TOKEN,
+  RECEIVE_GOODS,
+  RECEIVE_INFO,
+  RECEIVE_RATINGS
 } from './mutation-types'
 import {
   reqAddress,
   reqCategorys,
   reqShops,
   reqAutoLogin,
+  reqGoods,
+  reqInfo,
+  reqRatings
 } from '../api'
 
 export default {
@@ -87,6 +93,39 @@ export default {
         const user = result.data
         commit(RECEIVE_USER,{user})
       }
+    }
+  },
+  
+  //商家详情
+  async getInfo ({commit},callback) {
+    const result = await reqInfo()
+    if (result.code === 0) {
+      const info = result.data
+      commit(RECEIVE_INFO,{info})
+
+      typeof callback === 'function' && callback()
+    }
+  },
+
+  //商家评价
+  async getRatings ({commit},callback) {
+    const result = await reqRatings()
+    if (result.code === 0) {
+      const ratings = result.data
+      commit(RECEIVE_RATINGS,{ratings})
+
+      typeof callback === 'function' && callback()
+    }
+  },
+  
+  //商家商品
+  async getGoods ({commit},callback) {
+    const result = await reqGoods()
+    if (result.code === 0) {
+      const goods = result.data
+      commit(RECEIVE_GOODS,{goods})
+
+      typeof callback === 'function' && callback()
     }
   }
 }

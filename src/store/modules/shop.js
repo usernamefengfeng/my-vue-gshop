@@ -1,10 +1,13 @@
 /* 
   管理shop的相关状态数据的vuex模块
 */
+import Vue from 'vue'
 import {
   RECEIVE_GOODS,
   RECEIVE_INFO,
-  RECEIVE_RATINGS
+  RECEIVE_RATINGS,
+  ADD_FOOD_COUNT,
+  REDUCE_FOOD_COUNT,
 } from '../mutation-types'
 import {
   reqGoods,
@@ -48,6 +51,15 @@ const actions = {
 
       typeof callback === 'function' && callback()
     }
+  },
+
+  //增加/减少食物
+  updateFoodCount ({commit},{food,isAdd}) {
+    if (isAdd) {
+      commit(ADD_FOOD_COUNT,{food})
+    } else {
+      commit(REDUCE_FOOD_COUNT,{food})
+    }
   }
 }
 const mutations = {
@@ -59,6 +71,18 @@ const mutations = {
   },
   [RECEIVE_RATINGS] (state,{ratings}) {
     state.ratings = ratings
+  },
+  [ADD_FOOD_COUNT] (state,{food}) {
+    if (food.count) {
+      food.count++
+    } else {
+      Vue.set(food,'count',1)
+    }
+  },
+  [REDUCE_FOOD_COUNT] (state,{food}) {
+    if (food.count>0) {
+      food.count--
+    }
   },
 }
 const getters = {}

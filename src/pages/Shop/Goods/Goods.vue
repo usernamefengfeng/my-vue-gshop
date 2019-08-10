@@ -3,8 +3,9 @@
     <div class="goods">
 
       <div class="menu-wrapper" ref="left">
-        <ul>
-          <li class="menu-item current" v-for="good in goods" :key="good.name">
+        <ul ref="leftUl">   <!--  current -->
+          <li class="menu-item" :class="{current: currentIndex===index}" 
+              v-for="(good,index) in goods" :key="good.name" @click="selectItem(index)">
             <span class="text bottom-border-1px">
               <img class="icon" v-if="good.icon" :src="good.icon">
               {{good.name}}
@@ -14,7 +15,7 @@
       </div>
 
       <div class="foods-wrapper" ref="right">
-        <ul>
+        <ul ref="rightUl">
           <li class="food-list-hook" v-for="good in goods" :key="good.name">
             <h1 class="title">{{good.name}}</h1>
             <ul>
@@ -33,7 +34,7 @@
                     <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                   </div>
                   <div class="cartcontrol-wrapper">
-                    <CartControl/>
+                    <CartControl :food="food"/>
                   </div>
                 </div>
               </li>
@@ -48,27 +49,96 @@
 <script type="text/ecmascript-6">
   import {mapState} from 'vuex'
   import Bscroll from 'better-scroll'
-  import CartControl from '../../../components/CartControl/CartControl'
   export default {
-    components: {
-      CartControl
+    data() {
+      return {
+        scrollY: 0,   //右侧列表滑动的y轴坐标, 初始为0, 在滑动过程实时改变
+        tops: []  //右侧所有分类li的top组成的数组, 在列表显示之后统计一次即可
+      }
     },
+
+    mounted() {
+      if (this.goods.length>0) {
+        this._initScroll()
+        this._initTops()
+      }
+    },
+
     computed: {
       ...mapState({
         goods: state => state.shop.goods
-      })
+      }),
+
+      currentIndex () {
+        const {scrollY,tops} = this
+        //计算得到新的下标
+        const index = tops.findIndex((top,index) => scrollY >= top && scrollY < tops[index+1])
+        //先进行判断index是否相同---不同再保存到this上
+        if (index !== this.index && this.leftScroll) {
+          this.index = index
+          //让左侧分类列表互动到对应的li上
+          const li = this.$refs.leftUl.children[index]
+          this.leftScroll.scrollToElement(li,300)
+        }
+        return index
+      }
     },
 
-    watch: {
+    watch: {  //goods开始没有数据, 后来有了数据
       goods () {  //拿到了goods数据
         this.$nextTick(() => {
-          new Bscroll(this.$refs.left,{
-
-          })
-          new Bscroll(this.$refs.right,{
-            
-          })
+          this._initScroll()
+          this._initTops()
         })
+      }
+    },
+
+    methods: {
+      _initScroll () {  //滑动函数
+        this.leftScroll = new Bscroll(this.$refs.left,{
+          click: true  //分发自定义点击事件
+        })
+        this.rightScroll = new Bscroll(this.$refs.right,{
+          click: true,  //分发自定义点击事件
+          // probeType: 2  // 触摸   实时
+          // probeType: 3  // 触摸/惯性/编码  实时
+          probeType: 1  // 触摸  非实时监视滑动
+        })
+        //给rightScroll绑定scroll监听事件
+        this.rightScroll.on('scroll',({x,y}) => {
+          console.log('scroll----',x,y)
+          this.scrollY = Math.abs(y)
+        })
+        //给rightScroll绑定scrollEnd的监听
+        this.rightScroll.on('scrollEnd',({x,y}) => {
+          console.log('scrollEnd----',x,y)
+          this.scrollY = Math.abs(y)
+        })
+      },
+
+      _initTops () {  //实现默认选中
+        const tops = []
+        let top = 0
+        tops.push(top)
+        const lis = this.$refs.rightUl.children
+        Array.prototype.forEach.call(lis, li => {
+          top += li.clientHeight
+          tops.push(top)
+        })
+        //更新tops数据
+        this.tops = tops
+        console.log('tops----',top)
+      },
+
+      //实时更新左侧分类列表点击时-----右侧食物列表滑动
+      selectItem (index) {
+        const top = this.tops[index]
+        //立即更新scrollY
+        this.scrollY = top
+
+        // 让右侧列表滑动到对应位置
+        this.rightScroll.scrollTo(0,-top,300)
+
       }
     },
   }

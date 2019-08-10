@@ -9,11 +9,13 @@ import './validate'  //login界面验证
 
 import Header from 'components/Header/Header.vue'
 import Star from 'components/Star/Star.vue'
+import CartControl from 'components/CartControl/CartControl.vue'
 
 //注册全局组件
 Vue.component('Header',Header)
 Vue.component('Star',Star)
 Vue.component(Button.name, Button);
+Vue.component('CartControl',CartControl)
 
 Vue.config.productionTip = false  //禁止在Vue启动时的生产提示
 

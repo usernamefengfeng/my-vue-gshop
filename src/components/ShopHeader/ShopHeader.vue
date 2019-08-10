@@ -43,66 +43,70 @@
       </div>
     </div>
 
-    <div class="shop-brief-modal" v-show="isShowBulletin">
-      <div class="brief-modal-content">
-        <h2 class="content-title">
-          <span class="content-tag">
-            <span class="mini-tag">品牌</span>
-          </span>
-          <span class="content-name">{{info.name}}</span>
-        </h2>
-        <ul class="brief-modal-msg">
-          <li>
-            <h3>{{info.score}}</h3>
-            <p>评分</p>
-          </li>
-          <li>
-            <h3>{{info.sellCount}}单</h3>
-            <p>月售</p>
-          </li>
-          <li>
-            <h3>{{info.description}}</h3>
-            <p>约{{info.deliveryTime}}分钟</p>
-          </li>
-          <li>
-            <h3>{{info.deliveryPrice}}元</h3>
-            <p>配送费用</p>
-          </li>
-          <li>
-            <h3>{{info.distance}}</h3>
-            <p>距离</p>
-          </li>
-        </ul>
-        <h3 class="brief-modal-title">
-          <span>公告</span></h3>
-          <div class="brief-modal-notice">
-            {{info.bulletin}}
-          </div>
-        <div class="mask-footer" @click="isShowBulletin=false">
-          <span class="iconfont icon-close"></span>
-        </div>
-      </div>
-      <div class="brief-modal-cover" @click="isShowBulletin=false"></div>
-    </div>
-
-    <div class="activity-sheet" v-show="isShowSupport">
-      <div class="activity-sheet-content">
-        <h2 class="activity-sheet-title">
-        优惠活动</h2>
-        <ul class="list">
-          <li class="activity-item activity-green" :class="supportClass[support.type]" v-for="(support, index) in info.supports" :key="index">
+    <transition name="fade">
+      <div class="shop-brief-modal" v-show="isShowBulletin">
+        <div class="brief-modal-content">
+          <h2 class="content-title">
             <span class="content-tag">
-              <span class="mini-tag">{{support.name}}</span>
+              <span class="mini-tag">品牌</span>
             </span>
-            <span class="activity-content">{{support.content}}</span>
-          </li>
-        </ul>
-        <div class="activity-sheet-close" @click="isShowSupport=false">
-          <span class="iconfont icon-close"></span>
+            <span class="content-name">{{info.name}}</span>
+          </h2>
+          <ul class="brief-modal-msg">
+            <li>
+              <h3>{{info.score}}</h3>
+              <p>评分</p>
+            </li>
+            <li>
+              <h3>{{info.sellCount}}单</h3>
+              <p>月售</p>
+            </li>
+            <li>
+              <h3>{{info.description}}</h3>
+              <p>约{{info.deliveryTime}}分钟</p>
+            </li>
+            <li>
+              <h3>{{info.deliveryPrice}}元</h3>
+              <p>配送费用</p>
+            </li>
+            <li>
+              <h3>{{info.distance}}</h3>
+              <p>距离</p>
+            </li>
+          </ul>
+          <h3 class="brief-modal-title">
+            <span>公告</span></h3>
+            <div class="brief-modal-notice">
+              {{info.bulletin}}
+            </div>
+          <div class="mask-footer" @click="isShowBulletin=false">
+            <span class="iconfont icon-close"></span>
+          </div>
         </div>
+        <div class="brief-modal-cover" @click="isShowBulletin=false"></div>
       </div>
-      <div class="activity-sheet-cover" @click="isShowSupport=false"></div>
-    </div>
+    </transition>
+
+    <transition name="sheet">
+      <div class="activity-sheet" v-show="isShowSupport">
+        <div class="activity-sheet-content">
+          <h2 class="activity-sheet-title">
+          优惠活动</h2>
+          <ul class="list">
+            <li class="activity-item activity-green" :class="supportClass[support.type]" v-for="(support, index) in info.supports" :key="index">
+              <span class="content-tag">
+                <span class="mini-tag">{{support.name}}</span>
+              </span>
+              <span class="activity-content">{{support.content}}</span>
+            </li>
+          </ul>
+          <div class="activity-sheet-close" @click="isShowSupport=false">
+            <span class="iconfont icon-close"></span>
+          </div>
+        </div>
+        <div class="activity-sheet-cover" @click="isShowSupport=false"></div>
+      </div>
+    </transition>
 
   </div>
 </template>
@@ -314,6 +318,10 @@
       z-index 52
       flex-direction column
       color #333
+      &.fade-enter-active,&.fade-leave-active
+        transition opacity .5s
+      &.fade-enter,&.fade-leave-to
+        opacity 0
       .brief-modal-cover
         position absolute
         width 100%
@@ -419,6 +427,10 @@
       &.move-enter-active, &.move-leave-active
         transition opacity .3s
       &.move-enter-active, &.move-leave-active
+        opacity 0
+      &.sheet-enter-active,&.sheet-leave-active
+        transition opacity .5s
+      &.sheet-enter,&.sheet-leave-to
         opacity 0
       .activity-sheet-content
         position absolute

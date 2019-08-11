@@ -91,7 +91,7 @@ import {MessageBox} from 'mint-ui'
         if (this.isShow) {
           this.$nextTick(() => {
             /* 
-              单例对象: 单一的实例对象
+              单例对象: 单一的实例对象--只创建一次
               1. 创建前: 判断对象不存在才去创建 
               2. 创建后: 保存创建的对象
             */

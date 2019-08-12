@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>
-      <div class="split"></div>
+      <Split/>
       <RatingsFilter :onlyText="onlyText" :selectType="selectType"/>
 
       <div class="rating-wrapper">
@@ -42,7 +42,7 @@
               <div class="recommend">
                 <span class="iconfon" :class="rating.rateType===0 ? 'icon-thumb_up' : 'icon-thumb_down'"></span>
               </div>
-              <div class="time">{{rating.rateTime}}</div>
+              <div class="time">{{rating.rateTime | date-format}}</div>
             </div>
           </li>
         </ul>
@@ -55,6 +55,8 @@
   import {mapState} from 'vuex'
   import BScroll from 'better-scroll'
   import RatingsFilter from './RatingsFilter'
+  import '../../../filters/index'
+  import Split from '../../../components/Split/Split.vue'
   export default {
     data() {
       return {
@@ -118,7 +120,8 @@
     },
 
     components: {
-      RatingsFilter
+      RatingsFilter,
+      Split,
     },
   }
 </script>
@@ -194,12 +197,6 @@
             margin-left: 12px
             font-size: 12px
             color: rgb(147, 153, 159)
-    .split
-      width 100%
-      height 16px
-      border-top 1px solid rgba(7,17,27,0.1)
-      border-bottom 1px soli rgba(7,17,27,0.1)
-      background #f3f5f7
     .rating-wrapper
       padding: 0 18px
       .rating-item

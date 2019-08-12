@@ -3,47 +3,46 @@
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">
-          <h1 class="score">4.5</h1>
+          <h1 class="score">{{info.score}}</h1>
           <div class="title">综合评分</div>
-          <div class="rank">高于周边商家90%</div>
+          <div class="rank">高于周边商家{{info.rankRate}}%</div>
         </div>
         <div class="overview-right">
           <div class="score-wrapper">
             <span class="title">服务态度</span>
-            <Star :score="ratings.starClasses" :size="36"/>
-            <span class="score">4.4</span>
+            <Star :score="info.serviceScore" :size="36"/>
+            <span class="score">{{info.score}}</span>
           </div>
           <div class="score-wrapper">
             <span class="title">商品评分</span>
-            <Star :score="ratings.starClasses" :size="36"/>
-            <span class="score">4.6</span></div>
+            <Star :score="info.foodScore" :size="36"/>
+            <span class="score">{{info.foodScore}}</span></div>
           <div class="delivery-wrapper">
             <span class="title">送达时间</span>
-            <span class="delivery">30分钟</span>
+            <span class="delivery">{{info.deliveryTime}}分钟</span>
           </div>
         </div>
       </div>
-      <RatingsFilter/>
       <div class="split"></div>
+      <RatingsFilter :onlyText="onlyText" :selectType="selectType"/>
 
-      <div>RatingSelect组件</div>
       <div class="rating-wrapper">
         <ul>
-          <li class="rating-item" v-for="(filterRating, index) in filterRatings" :key="filterRating.username" >
+          <li class="rating-item" v-for="(rating, index) in filterRatings" :key="index" >
             <div class="avatar">
-              <img width="28" height="28" :src="filterRating.avatar">
+              <img width="28" height="28" :src="rating.avatar">
             </div>
             <div class="content">
-              <h1 class="name">xxx</h1>
+              <h1 class="name">{{rating.username}}</h1>
               <div class="star-wrapper">
-                <Star/>
-                <span class="delivery">30</span>
+                <Star :score="rating.score" :size="24"/>
+                <span class="delivery">{{rating.deliveryTime}}</span>
               </div>
-              <p class="text">还可以</p>
+              <p class="text">{{rating.text}}</p>
               <div class="recommend">
-                <span class="iconfont icon-thumb_up"></span>
+                <span class="iconfon" :class="rating.rateType===0 ? 'icon-thumb_up' : 'icon-thumb_down'"></span>
               </div>
-              <div class="time">2016-12-11 12:02:13</div>
+              <div class="time">{{rating.rateTime}}</div>
             </div>
           </li>
         </ul>
@@ -54,17 +53,73 @@
 
 <script type="text/ecmascript-6"> 
   import {mapState} from 'vuex'
-  import Star from 'components/Star/Star.vue'
+  import BScroll from 'better-scroll'
   import RatingsFilter from './RatingsFilter'
   export default {
+    data() {
+      return {
+        onlyText: true,  //只显示有内容额评论
+        selectType: 0,  //0--推荐   1--吐槽   2--显示全部
+      }
+    },
+
     computed: {
       ...mapState({
-        ratings: state => state.shop.ratings
-      })
+        ratings: state => state.shop.ratings,
+        info: state => state.shop.info,
+      }),
+
+      //对ratings数组进行过滤-----返回一个过滤后的新数组
+      filterRatings () {
+        const {onlyText,selectType,ratings} = this
+        //计算产生结果数据，并返回
+        return ratings.filter(rating => {
+          //定义rating的类型(推荐/吐槽/全部)，以及是否有内容
+          const {rateType,text} = rating
+          /* 
+            1.onlyText ===> true/false  ===> text:有值/没值
+            2.推荐--0，吐槽--1，全部--2 ===> selectType: 0/1/2
+              text:有值/onlyText===true----->只看有内容的评价
+          */
+          return (selectType === 2 || selectType === rateType) && (!onlyText || text.length > 0)
+        })
+      }
     },
+
+    mounted() {
+      this.$eventBus.$on('setSelectType',this.setSelectType)
+      this.$eventBus.$on('toggleOnlyText',this.toggleOnlyText)
+
+      //当从其他的路由路径切换过来时，数据已经存在，所以不会滑动
+      if (this.ratings.length>0) {
+        new BScroll('.ratings',{
+          click: true,
+        })
+      }
+    },
+
+    watch: {
+      ratings () {  //监视ratings，初始显示时，没有数据，到后来才有数据
+        this.$nextTick(() => {
+          new BScroll('.ratings',{
+            click: true,
+          })
+        })
+      }
+    },
+
+    methods: {
+      setSelectType (type) {
+        this.setSelectType = type
+      },
+      toggleOnlyText () {
+        this.onlyText = !this.onlyText
+      }
+    },
+
     components: {
       RatingsFilter
-    }
+    },
   }
 </script>
 
@@ -139,6 +194,12 @@
             margin-left: 12px
             font-size: 12px
             color: rgb(147, 153, 159)
+    .split
+      width 100%
+      height 16px
+      border-top 1px solid rgba(7,17,27,0.1)
+      border-bottom 1px soli rgba(7,17,27,0.1)
+      background #f3f5f7
     .rating-wrapper
       padding: 0 18px
       .rating-item

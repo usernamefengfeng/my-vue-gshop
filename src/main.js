@@ -18,6 +18,8 @@ Vue.component(Button.name, Button);
 Vue.component('CartControl',CartControl)
 
 Vue.config.productionTip = false  //禁止在Vue启动时的生产提示
+//自定义全局事件总线
+Vue.prototype.$eventBus = new Vue()
 
 new Vue({
   el: '#app',

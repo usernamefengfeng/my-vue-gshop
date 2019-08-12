@@ -1,17 +1,19 @@
 <template>
   <div class="ratings-filter">
     <div class="rating-type border-1px">
-      <span class="block">
-        全部<span class="count">1</span>
+      <span class="block" :class="{active: selectType===2}" @click="setType(2)">
+        全部<span class="count">{{totalRatingsCount}}</span>
       </span>
-      <span class="block active">
-        推荐<span class="count">1</span>
+      <span class="block" :class="{active: selectType===0}" @click="setType(0)">
+        推荐<span class="count">{{positiveRatingsCount}}</span>
       </span>
       <span class="block">
-        吐槽<span class="count">0</span>
+        吐槽<span class="count" :class="{active: selectType===1}" @click="setType(1)">
+          {{totalRatingsCount-positiveRatingsCount}}
+        </span>
       </span>
     </div>
-    <div class="switch on">
+    <div class="switch" :class="{on: onlyText}" @click="toggle">
       <span class="iconfont icon-check_circle"></span>
       <span class="text">只看有内容的评价</span>
     </div>
@@ -19,10 +21,29 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {mapGetters} from 'vuex'
   export default {
     props: {
-      ratings: Array,
-    }
+      onlyText: Boolean,
+      selectType: Number,
+    },
+
+    computed: {
+      //totalRatingsCount-----全部   positiveRatingsCount-----推荐
+      ...mapGetters(['totalRatingsCount','positiveRatingsCount'])
+    },
+
+    methods: {
+      setType (type) {
+        console.log('setSelectType')
+        this.$emit('setSelectType', type)
+        this.$eventBus.$emit('setSelectType',type)
+      },
+      toggle () {
+        console.log('toggleOnlyText')
+        this.$eventBus.$emit('toggleOnlyText')
+      }
+    },
   }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>

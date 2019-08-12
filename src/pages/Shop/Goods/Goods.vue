@@ -19,7 +19,8 @@
           <li class="food-list-hook" v-for="good in goods" :key="good.name">
             <h1 class="title">{{good.name}}</h1>
             <ul>
-              <li class="food-item bottom-border-1px" v-for="food in good.foods" :key="food.name">
+              <li class="food-item bottom-border-1px" v-for="food in good.foods" 
+                  :key="food.name" @click="foodShow(food)">
                 <div class="icon">
                   <img width="57" height="57" :src="food.icon">
                 </div>
@@ -45,6 +46,7 @@
 
       <ShopCart/>
     </div>
+    <Food ref="food" :food="food"/>
   </div>
 </template>
 
@@ -52,11 +54,13 @@
   import {mapState} from 'vuex'
   import Bscroll from 'better-scroll'
   import ShopCart from 'components/ShopCart/ShopCart.vue'
+  import Food from '../../../components/Food/Food.vue'
   export default {
     data() {
       return {
         scrollY: 0,   //右侧列表滑动的y轴坐标, 初始为0, 在滑动过程实时改变
-        tops: []  //右侧所有分类li的top组成的数组, 在列表显示之后统计一次即可
+        tops: [],  //右侧所有分类li的top组成的数组, 在列表显示之后统计一次即可
+        food: {},
       }
     },
 
@@ -119,7 +123,7 @@
         })
       },
 
-      _initTops () {  //实现默认选中
+      _initTops () {  //实现初始默认选中
         const tops = []
         let top = 0
         tops.push(top)
@@ -142,11 +146,18 @@
         // 让右侧列表滑动到对应位置
         this.rightScroll.scrollTo(0,-top,300)
 
+      },
+
+      //点击显示food--从子组件拿到food
+      foodShow (food) {
+        this.food = food
+        this.$refs.food.toggleShow()
       }
     },
 
     components: {
-      ShopCart
+      ShopCart,
+      Food
     }
   }
 </script>

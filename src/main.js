@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { Button } from 'mint-ui';
+import { Button } from 'mint-ui'
+import VueLazyload from 'vue-lazyload'
 
 import store from './store'    //vuex最核心的管理对象store
 import router from './router'  //路由器
@@ -20,6 +21,15 @@ Vue.component('CartControl',CartControl)
 Vue.config.productionTip = false  //禁止在Vue启动时的生产提示
 //自定义全局事件总线
 Vue.prototype.$eventBus = new Vue()
+
+import loading from './common/img/loading_.gif'
+//声明使用vue插件
+Vue.use(VueLazyload)
+
+// or with options
+Vue.use(VueLazyload, {  //内部自定义了一个全局指令: lazy
+  loading
+})
 
 new Vue({
   el: '#app',

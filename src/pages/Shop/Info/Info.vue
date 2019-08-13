@@ -30,10 +30,9 @@
       <section class="section">
         <h3 class="section-title">商家实景</h3>
         <div class="pic-wrapper">
-          <ul class="pic-list">
-            <li class="pic-item">
-              <img width="120" height="90" v-for="(pic, index) in info.pics" :key="index" 
-                    :src="info.pics[index]">
+          <ul class="pic-list" ref="picsUl">
+            <li class="pic-item" v-for="pic in info.pics" :key="pic">
+              <img width="120" height="90" :src="pic">
             </li>
           </ul>
         </div>
@@ -57,7 +56,7 @@
           </li>
           <li>
             <span class="bold">营业时间</span>
-            <span>09:35-21:00</span>
+            <span>{{info.workTime}}</span>
           </li>
         </ul>
       </section>
@@ -101,6 +100,17 @@ import {mapState} from 'vuex'
         //整体垂直滑动
         new Bscroll('.shop-info',{
           click: true
+        })
+        const ul = this.$refs.picsUl
+        const liWidth = 120
+        const space = 6
+        const liCount = this.info.pics.length
+        const width = (liWidth + space) * liCount - space
+        ul.style.width = width + 'px'
+        //图片水平滑动
+        new Bscroll('.pic-wrapper',{
+          click: true,
+          scrollX: true,    //水平滑动
         })
       }
     },

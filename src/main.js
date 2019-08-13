@@ -24,7 +24,6 @@ Vue.prototype.$eventBus = new Vue()
 
 import loading from './common/img/loading_.gif'
 //声明使用vue插件
-Vue.use(VueLazyload)
 
 // or with options
 Vue.use(VueLazyload, {  //内部自定义了一个全局指令: lazy

@@ -99,7 +99,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {mapState} from 'vuex'
+  import {mapState} from 'vuex'
   import {MessageBox} from 'mint-ui'
   export default {
     computed: {

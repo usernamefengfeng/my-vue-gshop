@@ -105,6 +105,8 @@ import {mapState} from 'vuex'
         const liWidth = 120
         const space = 6
         const liCount = this.info.pics.length
+        //debugger
+        //console.log(liCount)
         const width = (liWidth + space) * liCount - space
         ul.style.width = width + 'px'
         //图片水平滑动

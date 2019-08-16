@@ -41,6 +41,7 @@
 
     methods: {
       toggleShow () {
+        console.log(1)
         this.isShow = !this.isShow
       }
     },

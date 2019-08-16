@@ -60,6 +60,9 @@ const actions = {
     }
   },
 }
+/* 
+  直接更新数据状态
+*/
 const mutations = {
   [RECEIVE_ADDRESS] (state,address) {
     state.address = address

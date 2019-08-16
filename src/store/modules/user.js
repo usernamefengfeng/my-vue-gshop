@@ -31,8 +31,8 @@ const actions = {
 
   //退出登录
   logout ({commit}) {
-    commit(RESET_USER)
-    commit(RESET_TOKEN)
+    commit(RESET_USER)  //重置user
+    commit(RESET_TOKEN) //重置token
     localStorage.removeItem('token_key')
   },
 
